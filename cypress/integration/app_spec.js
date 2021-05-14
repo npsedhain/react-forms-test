@@ -7,8 +7,17 @@ const dummy = {
   homepage: 'https://google.com'
 };
 
+const dummy2 = {
+  name: 'Random Guy',
+  email: 'random@gmail.com',
+  age: 25,
+  phoneNumber: 988923423,
+  password: '@##!12132DdsFDSFSads@#@1$%$DIFF12',
+  homepage: 'https://google.com'
+};
+
 describe('Sign Up', () => {
-  it('Adds a person to the list', () => {
+  it('Adds a couple of people to the list', () => {
     cy.visit('/');
     cy.contains('Sign Up');
 
@@ -20,19 +29,33 @@ describe('Sign Up', () => {
     cy.get('[name="password"]').type(dummy.password);
     cy.get('[name="homepage"]').type(dummy.homepage);
 
-    const submitButton = cy.get('input[type="submit"]');
-    // make sure the submit button is not disabled
-    submitButton.should('not.be.disabled');
-    // press the submit button
-    submitButton.click();
+    cy.get('form').submit();
 
-    // make sure the right values are added to the table
+    // wait for submission to complete
+    cy.get('tbody').contains(dummy.name);
+
+    // type the form details for second user
+    cy.get('[name="name"]').type(dummy2.name);
+    cy.get('[name="email"]').type(dummy2.email);
+    cy.get('[name="age"]').type(dummy2.age);
+    cy.get('[name="phoneNumber"]').type(dummy2.phoneNumber);
+    cy.get('[name="password"]').type(dummy2.password);
+    cy.get('[name="homepage"]').type(dummy2.homepage);
+
+    cy.get('form').submit();
+
+    // make sure all the right values are added to the table finally
     const tbody = cy.get('tbody');
     tbody.should('contain', dummy.name);
     tbody.should('contain', dummy.email);
     tbody.should('contain', dummy.age);
     tbody.should('contain', dummy.phoneNumber);
     tbody.should('contain', dummy.homepage);
+    tbody.should('contain', dummy2.name);
+    tbody.should('contain', dummy2.email);
+    tbody.should('contain', dummy2.age);
+    tbody.should('contain', dummy2.phoneNumber);
+    tbody.should('contain', dummy2.homepage);
   });
 
   it('Submit button should be disabled when form is empty', () => {
