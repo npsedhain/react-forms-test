@@ -33,6 +33,7 @@ module.exports = class extends React.Component {
 
   onBlur = evt => {
     this.setState({hasBlurred: true})
+    const name = this.props.name;
     const value = this.state.value || ''
     const error = this.props.validate ? this.props.validate(value) : false;
 
